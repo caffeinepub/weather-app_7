@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Fonts ──────────────────────────────────────────────── */
+@font-face {
+  font-family: "Sora";
+  src: url("/assets/fonts/Sora[wght].woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque[opsz,wdth,wght].woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --radius: 1rem;
+
+    /* Deep midnight observatory palette */
+    --background:        0.10 0.025 252;
+    --foreground:        0.96 0.008 240;
+
+    --card:              0.14 0.030 255;
+    --card-foreground:   0.96 0.008 240;
+
+    --popover:           0.16 0.040 258;
+    --popover-foreground: 0.96 0.008 240;
+
+    --primary:           0.80 0.175 218;
+    --primary-foreground: 0.08 0.020 255;
+
+    --secondary:         0.20 0.040 255;
+    --secondary-foreground: 0.85 0.050 220;
+
+    --muted:             0.18 0.030 255;
+    --muted-foreground:  0.58 0.060 242;
+
+    --accent:            0.74 0.220 198;
+    --accent-foreground: 0.08 0.020 255;
+
+    --destructive:       0.60 0.220 25;
+    --destructive-foreground: 0.98 0 0;
+
+    --border:            0.26 0.055 255;
+    --input:             0.22 0.040 255;
+    --ring:              0.80 0.175 218;
+
+    --chart-1: 0.80 0.175 218;
+    --chart-2: 0.74 0.220 198;
+    --chart-3: 0.65 0.200 165;
+    --chart-4: 0.80 0.150 80;
+    --chart-5: 0.68 0.220 30;
+
+    --sidebar:                  0.12 0.020 255;
+    --sidebar-foreground:       0.96 0.008 240;
+    --sidebar-primary:          0.80 0.175 218;
+    --sidebar-primary-foreground: 0.08 0.020 255;
+    --sidebar-accent:           0.20 0.040 255;
+    --sidebar-accent-foreground: 0.85 0.050 220;
+    --sidebar-border:           0.26 0.055 255;
+    --sidebar-ring:             0.80 0.175 218;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Sora", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  /* ── Glass card system ─────────────────────────────────────
+     Three tiers of elevation. The key fix: use lower opacity
+     so underlying weather gradients bleed through,
+     + strong inset highlight for perceived depth.
+  ──────────────────────────────────────────────────────────── */
+  .glass-card {
+    background: oklch(0.14 0.032 255 / 0.55);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid oklch(0.42 0.09 255 / 0.30);
+    box-shadow:
+      0 12px 40px oklch(0 0 0 / 0.50),
+      inset 0 1px 0 oklch(1 0 0 / 0.09),
+      inset 0 -1px 0 oklch(0 0 0 / 0.15);
+  }
+
+  /* Slightly more opaque for nested/secondary surfaces */
+  .glass-card-light {
+    background: oklch(0.18 0.038 255 / 0.45);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid oklch(0.40 0.08 255 / 0.22);
+    box-shadow:
+      0 4px 16px oklch(0 0 0 / 0.30),
+      inset 0 1px 0 oklch(1 0 0 / 0.07);
+  }
+
+  /* Elevated popover tier */
+  .glass-elevated {
+    background: oklch(0.17 0.040 257 / 0.80);
+    backdrop-filter: blur(32px) saturate(220%);
+    -webkit-backdrop-filter: blur(32px) saturate(220%);
+    border: 1px solid oklch(0.42 0.09 255 / 0.35);
+    box-shadow:
+      0 16px 48px oklch(0 0 0 / 0.55),
+      0 2px 8px oklch(0 0 0 / 0.30),
+      inset 0 1px 0 oklch(1 0 0 / 0.11);
+  }
+
+  /* ── Weather gradient backgrounds ─────────────────────────
+     These wrap the glass card. Using more vivid, spread-out
+     gradients that visually bleed through the semi-transparent glass.
+     Multiple layered radials create atmospheric depth.
+  ──────────────────────────────────────────────────────────── */
+  .weather-bg-clear {
+    background:
+      /* Sun corona at top-right */
+      radial-gradient(ellipse 55% 45% at 82% -5%,  oklch(0.88 0.18 85 / 0.55)  0%, transparent 55%),
+      /* Sky blue diffusion */
+      radial-gradient(ellipse 90% 60% at 20% 10%,  oklch(0.65 0.22 228 / 0.50) 0%, transparent 55%),
+      /* Atmosphere base */
+      radial-gradient(ellipse 140% 90% at 50% 100%, oklch(0.20 0.06 240 / 0.80) 0%, transparent 70%),
+      oklch(0.10 0.03 250);
+  }
+
+  .weather-bg-cloudy {
+    background:
+      /* Cool blue-grey mass top-left */
+      radial-gradient(ellipse 80% 55% at -5% 10%,  oklch(0.45 0.07 255 / 0.55) 0%, transparent 55%),
+      /* Silver lining top-right */
+      radial-gradient(ellipse 60% 40% at 95% 5%,   oklch(0.55 0.05 245 / 0.40) 0%, transparent 50%),
+      /* Heavy cloud base */
+      radial-gradient(ellipse 140% 80% at 50% 110%, oklch(0.18 0.04 250 / 0.70) 0%, transparent 65%),
+      oklch(0.10 0.025 252);
+  }
+
+  .weather-bg-rain {
+    background:
+      /* Dark rain-laden top */
+      radial-gradient(ellipse 100% 50% at 40% -10%,  oklch(0.30 0.10 240 / 0.70) 0%, transparent 55%),
+      /* Deep teal accent side */
+      radial-gradient(ellipse 55% 60% at 90% 30%,   oklch(0.22 0.08 220 / 0.50) 0%, transparent 55%),
+      /* Rain puddle shimmer at bottom */
+      radial-gradient(ellipse 120% 40% at 30% 110%,  oklch(0.35 0.12 215 / 0.35) 0%, transparent 60%),
+      oklch(0.08 0.035 248);
+  }
+
+  .weather-bg-snow {
+    background:
+      /* Bright icy crown */
+      radial-gradient(ellipse 70% 45% at 50% -8%,   oklch(0.82 0.06 235 / 0.45) 0%, transparent 55%),
+      /* Pale blue-white ambient */
+      radial-gradient(ellipse 100% 70% at 10% 40%,  oklch(0.68 0.05 230 / 0.35) 0%, transparent 60%),
+      /* Cool base */
+      radial-gradient(ellipse 140% 60% at 70% 110%, oklch(0.25 0.04 245 / 0.60) 0%, transparent 65%),
+      oklch(0.11 0.022 252);
+  }
+
+  .weather-bg-storm {
+    background:
+      /* Purple-violet storm cell */
+      radial-gradient(ellipse 80% 55% at 60% -10%,  oklch(0.32 0.14 285 / 0.70) 0%, transparent 55%),
+      /* Lightning yellow-green flash */
+      radial-gradient(ellipse 30% 25% at 75% 20%,   oklch(0.75 0.16 100 / 0.20) 0%, transparent 45%),
+      /* Deep violet base */
+      radial-gradient(ellipse 130% 70% at 20% 110%, oklch(0.15 0.08 275 / 0.80) 0%, transparent 65%),
+      oklch(0.07 0.04 270);
+  }
+
+  .weather-bg-fog {
+    background:
+      /* Grey-blue fog bank */
+      radial-gradient(ellipse 110% 60% at 50% -5%,  oklch(0.50 0.04 248 / 0.45) 0%, transparent 60%),
+      /* Murky low-visibility ambient */
+      radial-gradient(ellipse 80% 80% at 20% 60%,   oklch(0.38 0.03 252 / 0.35) 0%, transparent 55%),
+      oklch(0.10 0.022 250);
+  }
+
+  /* ── Temperature number glow ───────────────────────────── */
+  .temp-glow {
+    text-shadow:
+      0 0 40px oklch(0.80 0.175 218 / 0.25),
+      0 0 80px oklch(0.80 0.175 218 / 0.12);
+  }
+
+  /* ── Scrollbar styling ─────────────────────────────────── */
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: oklch(0.35 0.08 255 / 0.50);
+    border-radius: 2px;
+  }
+
+  /* ── Skeleton shimmer ─────────────────────────────────── */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      oklch(0.18 0.030 255) 0%,
+      oklch(0.24 0.052 255) 50%,
+      oklch(0.18 0.030 255) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+}
